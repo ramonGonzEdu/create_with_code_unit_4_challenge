@@ -7,7 +7,7 @@ public class PlayerControllerX : MonoBehaviour
 	private Rigidbody playerRb;
 	private float speed = 500;
 	private ParticleSystem boostParticles;
-	public bool isBoost = false;
+	private bool isBoost = false;
 	private GameObject focalPoint;
 
 	public bool hasPowerup;
