@@ -6,6 +6,8 @@ public class PlayerControllerX : MonoBehaviour
 {
 	private Rigidbody playerRb;
 	private float speed = 500;
+	private ParticleSystem boostParticles;
+	public bool isBoost = false;
 	private GameObject focalPoint;
 
 	public bool hasPowerup;
@@ -18,6 +20,7 @@ public class PlayerControllerX : MonoBehaviour
 	void Start()
 	{
 		playerRb = GetComponent<Rigidbody>();
+		boostParticles = GetComponent<ParticleSystem>();
 		focalPoint = GameObject.Find("Focal Point");
 	}
 
@@ -25,10 +28,27 @@ public class PlayerControllerX : MonoBehaviour
 	{
 		// Add force to player in direction of the focal point (and camera)
 		float verticalInput = Input.GetAxis("Vertical");
-		playerRb.AddForce(focalPoint.transform.forward * verticalInput * speed * Time.deltaTime);
+		playerRb.AddForce(focalPoint.transform.forward * verticalInput * speed * Time.deltaTime * (isBoost ? 2 : 1));
 
 		// Set powerup indicator position to beneath player
 		powerupIndicator.transform.position = transform.position + new Vector3(0, -0.6f, 0);
+
+		if ((Input.GetKey(KeyCode.Space) || (UnityEngine.Application.isEditor && Input.GetKey(KeyCode.O))))
+		{
+			if (!isBoost)
+			{
+				isBoost = true;
+				boostParticles.Play();
+			}
+		}
+		else
+		{
+			if (isBoost)
+			{
+				isBoost = false;
+				boostParticles.Stop();
+			}
+		}
 
 	}
 
